@@ -5,35 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task & Earn Platform</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f9; padding: 20px; text-align: center; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin: 15px auto; max-width: 400px; }
-        .btn { background: #28a745; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; }
+        body { font-family: Arial, sans-serif; background: #f4f4f9; padding: 15px; text-align: center; margin: 0; }
+        .container { max-width: 450px; margin: auto; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        .btn { background: #28a745; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
+        .btn:disabled { background: #cccccc; cursor: not-allowed; }
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-bottom: 10px; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        #timer { font-weight: bold; color: #dc3545; }
+        input[type="text"] { width: 90%; padding: 10px; margin-top: 8px; border: 1px solid #ddd; border-radius: 5px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <h1>Kaffaltii Taskii Hojjechuu</h1>
+<div class="container">
+    <h1>Task & Earn</h1>
 
+    <!-- 1. Madaallii fi Baasii (Balance & Withdrawal) -->
     <div class="card">
         <h3>Madaallii Keessan (Balance)</h3>
-        <h2 id="balance">0.00 ETB</h2>
+        <h2 id="balance" style="color: #007bff;">0.00 ETB</h2>
+        <button class="btn" style="background: #17a2b8;" onclick="withdraw()">Qarshii Baafachuuf (Withdraw)</button>
     </div>
 
+    <!-- 2. Taskii Viidiyoo Daawwachuu -->
     <div class="card">
-        <h3>Taskii Amma Jiru</h3>
-        <p>Channel Telegram Subscribe Gochuu</p>
-        <p><strong>Badhaasa: 2.00 ETB</strong></p>
-        <button class="btn" onclick="completeTask()">Taskii Hojjedhu</button>
+        <h3>1. Viidiyoo YouTube Daawwachuu</h3>
+        <p>Viidiyoo sekoondii 15f daawwachuun 3.00 ETB argadhaa!</p>
+        
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+        </div>
+
+        <p>Yeroo hafe: <span id="timer">15</span> seconds</p>
+        <button id="taskBtn" class="btn" onclick="startTask()">Taskii Jalqabi</button>
     </div>
 
-    <script>
-        let userBalance = 0.00;
+    <!-- 3. Linkii Affeerraa (Referral Program) -->
+    <div class="card">
+        <h3>2. Hiriyoota Affeeruu (Referral)</h3>
+        <p>Linkii keessan kopy gochuun hiriyootaaf ergaa. Namni seene kaffaltii isiniif argamsiisa!</p>
+        <input type="text" id="refLink" readonly>
+        <button class="btn" style="background: #ffc107; color: black;" onclick="copyLink()">Linkii Copy Godhi</button>
+    </div>
+</div>
 
-        function completeTask() {
-            userBalance += 2.00;
-            document.getElementById('balance').innerText = userBalance.toFixed(2) + " ETB";
-            alert("Galatoomaa! Taskii xumurtaniiltu. 2.00 ETB account keessanitti dabalameera.");
+<script>
+    // LocalStorage fayyadamuun balance fi referral akka hin badne gochuu (Database salphaa)
+    let userBalance = parseFloat(localStorage.getItem('userBalance')) || 0.00;
+    let userId = localStorage.getItem('userId') || Math.floor(100000 + Math.random() * 900000);
+    localStorage.setItem('userId', userId);
+
+    // Dynamic Referral Link
+    let currentUrl = window.location.href.split('?')[0];
+    let myRefLink = currentUrl + "?ref=" + userId;
+    document.getElementById('refLink').value = myRefLink;
+
+    // Fuulli yeroo banamu balance agarsiisuu
+    document.getElementById('balance').innerText = userBalance.toFixed(2) + " ETB";
+
+    // Check Referral yoo nama biraatiin seene
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('ref') && !localStorage.getItem('referred')) {
+        localStorage.setItem('referred', 'true');
+        alert("Baga nagaan dhufte! Linkii affeerraatiin waan seenteef welcome bonus agarsiifama.");
+    }
+
+    // Taskii Viidiyoo Jalqabsiisuu
+    let timeLeft = 15;
+    let timerId;
+    function startTask() {
+        document.getElementById('taskBtn').disabled = true;
+        document.getElementById('taskBtn').innerText = "Daawwachaa Jirta...";
+        
+        timerId = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = timeLeft;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timerId);
+                userBalance += 3.00;
+                saveBalance();
+                document.getElementById('taskBtn').innerText = "Taskii Xumurameera!";
+                alert("Baga gammadde! 3.00 ETB madaallii keetti dabalameera.");
+            }
+        }, 1000);
+    }
+
+    // Linkii Affeerraa Copy Gochuu
+    function copyLink() {
+        let copyText = document.getElementById("refLink");
+        copyText.select();
+        document.executecopyCommand ? document.execCommand("copy") : navigator.clipboard.writeText(copyText.value);
+        alert("Linkiin keessan copy ta'eera: " + copyText.value);
+    }
+
+    // Qarshii Baafachuu (Withdraw)
+    function withdraw() {
+        if (userBalance < 100) {
+            alert("Qarshii baafachuuf yoo xiqqaate balance keessan 100.00 ETB gahuu qaba!");
+        } else {
+            let phone = prompt("Kaffaltiin akka isiniif ergamuuf lakkoofsa bilbilaa Telebirr/CBE Birr keessan galchaa:");
+            if (phone) {
+                alert("Gaaffiin kaffaltii " + userBalance.toFixed(2) + " ETB lakkoofsa " + phone + " tti ergameera. Daangaa sa'aatii 24 keessatti isiniif ergama!");
+                userBalance = 0;
+                saveBalance();
+            }
         }
-    </script>
+    }
+
+    function saveBalance() {
+        localStorage.setItem('userBalance', userBalance);
+        document.getElementById('balance').innerText = userBalance.toFixed(2) + " ETB";
+    }
+</script>
+
 </body>
 </html>
