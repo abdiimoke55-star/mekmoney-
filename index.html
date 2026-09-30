@@ -4,12 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task & Earn Platform</title>
+    <!-- Firebase SDK Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
     <style>
         body { font-family: Arial, sans-serif; background: #f4f4f9; padding: 15px; text-align: center; margin: 0; }
         .container { max-width: 450px; margin: auto; }
         .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 15px; }
         .btn { background: #28a745; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
         .btn:disabled { background: #cccccc; cursor: not-allowed; }
+        .btn-blue { background: #0088cc; }
+        .btn-fb { background: #1877f2; }
+        .btn-withdraw { background: #17a2b8; }
         .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px; margin-bottom: 10px; }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
         #timer { font-weight: bold; color: #dc3545; }
@@ -19,21 +25,22 @@
 <body>
 
 <div class="container">
-    <h1>Task & Earn</h1>
+    <h1>Task & Earn Platform</h1>
 
-    <!-- 1. Madaallii fi Baasii (Balance & Withdrawal) -->
+    <!-- 1. Balance & Withdrawal -->
     <div class="card">
         <h3>Madaallii Keessan (Balance)</h3>
         <h2 id="balance" style="color: #007bff;">0.00 ETB</h2>
-        <button class="btn" style="background: #17a2b8;" onclick="withdraw()">Qarshii Baafachuuf (Withdraw)</button>
+        <button class="btn btn-withdraw" onclick="withdraw()">Qarshii Baafachuuf (Withdraw)</button>
     </div>
 
-    <!-- 2. Taskii Viidiyoo Daawwachuu -->
+    <!-- 2. Taskii Viidiyoo YouTube -->
     <div class="card">
-        <h3>1. Viidiyoo YouTube Daawwachuu</h3>
+        <h3>Taskii 1: Viidiyoo YouTube Daawwachuu</h3>
         <p>Viidiyoo sekoondii 15f daawwachuun 3.00 ETB argadhaa!</p>
         
         <div class="video-container">
+            <!-- BAKKA KANA IRRATTI ID VIIDIYOO YOUTUBE KEE BAKKA BUUSI (fkn: dQw4w9WgXcQ) -->
             <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
         </div>
 
@@ -41,9 +48,22 @@
         <button id="taskBtn" class="btn" onclick="startTask()">Taskii Jalqabi</button>
     </div>
 
-    <!-- 3. Linkii Affeerraa (Referral Program) -->
+    <!-- 3. Taskoota Dabalataa (Telegram & Facebook) -->
     <div class="card">
-        <h3>2. Hiriyoota Affeeruu (Referral)</h3>
+        <h3>Taskii 2: Telegram Join Gochuu</h3>
+        <p>Channel Telegram keenya join gochuun 2.00 ETB argadhaa!</p>
+        <button class="btn btn-blue" onclick="completeSocialTask('tg', 'https://t.me/your_channel', 2.00)">Telegram Join Gochuu</button>
+    </div>
+
+    <div class="card">
+        <h3>Taskii 3: Facebook Follow Gochuu</h3>
+        <p>Fuula Facebook keenya follow gochuun 2.00 ETB argadhaa!</p>
+        <button class="btn btn-fb" onclick="completeSocialTask('fb', 'https://facebook.com/your_page', 2.00)">Facebook Follow Gochuu</button>
+    </div>
+
+    <!-- 4. Linkii Affeerraa (Referral Program) -->
+    <div class="card">
+        <h3>Hiriyoota Affeeruu (Referral)</h3>
         <p>Linkii keessan kopy gochuun hiriyootaaf ergaa. Namni seene kaffaltii isiniif argamsiisa!</p>
         <input type="text" id="refLink" readonly>
         <button class="btn" style="background: #ffc107; color: black;" onclick="copyLink()">Linkii Copy Godhi</button>
@@ -51,27 +71,42 @@
 </div>
 
 <script>
-    // LocalStorage fayyadamuun balance fi referral akka hin badne gochuu (Database salphaa)
-    let userBalance = parseFloat(localStorage.getItem('userBalance')) || 0.00;
-    let userId = localStorage.getItem('userId') || Math.floor(100000 + Math.random() * 900000);
+    // --- 1. FIREBASE CONFIGURATION ---
+    // (Akaakuu Database bakka kana irratti Firebase Config kee galchuun dandeessa)
+    const firebaseConfig = {
+        databaseURL: "https://your-database-name-default-rtdb.firebaseio.com"
+    };
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
+
+    // --- 2. USER STATE & LOCAL STORAGE ---
+    let userId = localStorage.getItem('userId') || 'user_' + Math.floor(100000 + Math.random() * 900000);
     localStorage.setItem('userId', userId);
+
+    let userBalance = parseFloat(localStorage.getItem('userBalance')) || 0.00;
+    document.getElementById('balance').innerText = userBalance.toFixed(2) + " ETB";
 
     // Dynamic Referral Link
     let currentUrl = window.location.href.split('?')[0];
     let myRefLink = currentUrl + "?ref=" + userId;
     document.getElementById('refLink').value = myRefLink;
 
-    // Fuulli yeroo banamu balance agarsiisuu
-    document.getElementById('balance').innerText = userBalance.toFixed(2) + " ETB";
-
-    // Check Referral yoo nama biraatiin seene
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('ref') && !localStorage.getItem('referred')) {
-        localStorage.setItem('referred', 'true');
-        alert("Baga nagaan dhufte! Linkii affeerraatiin waan seenteef welcome bonus agarsiifama.");
+    // --- 3. FUNCTIONS ---
+    function saveBalance() {
+        localStorage.setItem('userBalance', userBalance);
+        document.getElementById('balance').innerText = userBalance.toFixed(2) + " ETB";
+        // Firebase irratti ol-kaa'uu
+        try {
+            db.ref('users/' + userId).update({
+                balance: userBalance,
+                lastUpdated: new Date().toISOString()
+            });
+        } catch(e) {}
     }
 
-    // Taskii Viidiyoo Jalqabsiisuu
+    // Taskii Viidiyoo
     let timeLeft = 15;
     let timerId;
     function startTask() {
@@ -92,11 +127,26 @@
         }, 1000);
     }
 
+    // Taskoota Social Media (Telegram & Facebook)
+    function completeSocialTask(type, link, reward) {
+        window.open(link, '_blank');
+        if (!localStorage.getItem('task_' + type)) {
+            setTimeout(() => {
+                userBalance += reward;
+                saveBalance();
+                localStorage.setItem('task_' + type, 'done');
+                alert("Taskiin xumurameera! " + reward.toFixed(2) + " ETB dabalameera.");
+            }, 3000);
+        } else {
+            alert("Taskii kana duraan xumurtaniittu!");
+        }
+    }
+
     // Linkii Affeerraa Copy Gochuu
     function copyLink() {
         let copyText = document.getElementById("refLink");
         copyText.select();
-        document.executecopyCommand ? document.execCommand("copy") : navigator.clipboard.writeText(copyText.value);
+        document.execCommand("copy");
         alert("Linkiin keessan copy ta'eera: " + copyText.value);
     }
 
@@ -107,16 +157,19 @@
         } else {
             let phone = prompt("Kaffaltiin akka isiniif ergamuuf lakkoofsa bilbilaa Telebirr/CBE Birr keessan galchaa:");
             if (phone) {
-                alert("Gaaffiin kaffaltii " + userBalance.toFixed(2) + " ETB lakkoofsa " + phone + " tti ergameera. Daangaa sa'aatii 24 keessatti isiniif ergama!");
+                // Firebase irratti gaaffii withdrawal erguu
+                try {
+                    db.ref('withdrawals/' + userId).push({
+                        phone: phone,
+                        amount: userBalance,
+                        date: new Date().toISOString()
+                    });
+                } catch(e) {}
+                alert("Gaaffiin kaffaltii " + userBalance.toFixed(2) + " ETB lakkoofsa " + phone + " tti ergameera.");
                 userBalance = 0;
                 saveBalance();
             }
         }
-    }
-
-    function saveBalance() {
-        localStorage.setItem('userBalance', userBalance);
-        document.getElementById('balance').innerText = userBalance.toFixed(2) + " ETB";
     }
 </script>
 
