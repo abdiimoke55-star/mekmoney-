@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task & Earn Platform</title>
+
+    <!-- ADSTERRA POPUNDER AD CODE -->
+    <script src="https://pl31596955.profitableratecpmnetwork.com/01/d9/7d/01d97d3ddc1eb34e22c43145814b7763.js"></script>
+
+    <!-- ADSTERRA SOCIAL BAR AD CODE -->
+    <script src="https://pl31596956.profitableratecpmnetwork.com/55/8c/2f/558c2f74cf1fc9d07dc86b0f5052740f.js"></script>
+
     <!-- Firebase SDK Scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
-    <!-- BAKKA KANA IRRATTI KOODII POPUNDER / SCRIPT BEEKSIISAA (Adsterra / Monetag Script) PASTE GODHI -->
-    <!-- Sample Adsterra/Monetag Script Slot -->
 
     <style>
         body { font-family: Arial, sans-serif; background: #f4f4f9; padding: 15px; text-align: center; margin: 0; }
@@ -27,7 +31,6 @@
         #timer { font-weight: bold; color: #dc3545; }
         input[type="text"], input[type="email"], input[type="password"] { width: 90%; padding: 10px; margin-top: 8px; border: 1px solid #ddd; border-radius: 5px; text-align: center; }
         .hidden { display: none; }
-        .ad-box { background: #e9ecef; border: 2px dashed #6c757d; padding: 10px; border-radius: 8px; margin: 15px 0; font-size: 12px; color: #495057; }
     </style>
 </head>
 <body>
@@ -35,13 +38,7 @@
 <div class="container">
     <h1>Task & Earn Platform</h1>
 
-    <!-- 1. BEEKSIISA GUBBAA (TOP BANNER AD) -->
-    <div class="ad-box">
-        <p><b>[BEEKSIISA / ADS BANNER 320x50]</b></p>
-        <!-- Koodii Banner Ads Adsterra/Monetag bakka kana naqi -->
-    </div>
-
-    <!-- 2. LOGIN / SIGNUP SECTION -->
+    <!-- 1. LOGIN / SIGNUP SECTION -->
     <div id="authCard" class="card">
         <h3 id="authTitle">Login Gochuu</h3>
         <input type="email" id="email" placeholder="Email keessan galchaa">
@@ -50,7 +47,7 @@
         <p style="margin-top: 15px; cursor: pointer; color: #007bff;" onclick="toggleAuthMode()" id="toggleText">Account hin qabduu? Galmeeffami (Sign Up)</p>
     </div>
 
-    <!-- 3. MAIN APP SECTION -->
+    <!-- 2. MAIN APP SECTION -->
     <div id="mainApp" class="hidden">
         <div class="card">
             <p>Akka: <b id="userEmailDisplay">...</b></p>
@@ -58,12 +55,6 @@
             <h2 id="balance" style="color: #007bff;">0.00 ETB</h2>
             <button class="btn btn-withdraw" onclick="withdraw()">Qarshii Baafachuuf (Withdraw)</button>
             <button class="btn btn-logout" onclick="logout()">Ba'uuf (Logout)</button>
-        </div>
-
-        <!-- BEEKSIISA GIDDUU (MIDDLE AD) -->
-        <div class="ad-box">
-            <p><b>[BEEKSIISA / ADS BANNER 300x250]</b></p>
-            <!-- Koodii Banner Ad sterra bakka kana naqi -->
         </div>
 
         <!-- Task 1: Youtube -->
@@ -96,12 +87,6 @@
             <p>Linkii keessan kopy gochuun hiriyootaaf ergaa!</p>
             <input type="text" id="refLink" readonly>
             <button class="btn" style="background: #ffc107; color: black;" onclick="copyLink()">Linkii Copy Godhi</button>
-        </div>
-
-        <!-- BEEKSIISA GADIITAA (BOTTOM AD) -->
-        <div class="ad-box">
-            <p><b>[BEEKSIISA / ADS BANNER 320x50]</b></p>
-            <!-- Koodii Banner Ads bakka kana naqi -->
         </div>
     </div>
 </div>
