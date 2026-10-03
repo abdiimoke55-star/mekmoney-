@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="om">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mekmoney - Task & Earn Platform</title>
+
+  <!-- Firebase SDK Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>Mekmoney Platform</h1>
+    
+    <div id="auth-box">
+      <h2>Sign Up / Log In</h2>
+      <input type="email" id="email" placeholder="Email kee galchi..." required>
+      <input type="password" id="password" placeholder="Password (jechoota 6+)..." required>
+      <button id="signup-btn">Sign Up</button>
+      <button id="login-btn">Log In</button>
+    </div>
+
+    <div id="dashboard" style="display:none;">
+      <h2>Akkam nagayatti geesse!</h2>
+      <p>Balance: <span id="user-balance">0</span> ETB</p>
+      <button id="logout-btn">Log Out</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
