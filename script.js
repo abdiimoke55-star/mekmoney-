@@ -1,17 +1,17 @@
-// Firebase Configuration
-const firebaseConfig = {
-  databaseURL: "https://mekmoney-633a9-default-rtdb.firebaseio.com"
-};
-
-// Initialize Firebase
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-
-const auth = firebase.auth();
-const database = firebase.database();
-
 window.addEventListener('DOMContentLoaded', () => {
+  // Firebase Configuration
+  const firebaseConfig = {
+    databaseURL: "https://mekmoney-633a9-default-rtdb.firebaseio.com"
+  };
+
+  // Initialize Firebase safely
+  if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  const auth = firebase.auth();
+  const database = firebase.database();
+
   const signupBtn = document.getElementById('signup-btn');
   const loginBtn = document.getElementById('login-btn');
   const logoutBtn = document.getElementById('logout-btn');
@@ -21,9 +21,11 @@ window.addEventListener('DOMContentLoaded', () => {
   const dashboard = document.getElementById('dashboard');
   const userBalance = document.getElementById('user-balance');
 
-  // Sign Up Event
+  // Sign Up Click
   if (signupBtn) {
-    signupBtn.onclick = function() {
+    signupBtn.onclick = function(e) {
+      if (e) e.preventDefault();
+      
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
 
@@ -62,9 +64,11 @@ window.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  // Log In Event
+  // Log In Click
   if (loginBtn) {
-    loginBtn.onclick = function() {
+    loginBtn.onclick = function(e) {
+      if (e) e.preventDefault();
+      
       const email = emailInput.value.trim();
       const password = passwordInput.value.trim();
 
@@ -89,7 +93,7 @@ window.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  // Log Out Event
+  // Log Out Click
   if (logoutBtn) {
     logoutBtn.onclick = function() {
       auth.signOut();
