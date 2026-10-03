@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mekmoney - Task & Earn Platform</title>
+  <title>Mekmoney - Task & Earn</title>
 
   <!-- Firebase SDK Scripts -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -15,23 +15,30 @@
 <body>
 
   <div class="container">
-    <h1>Mekmoney Platform</h1>
+    <h1>Mekmoney</h1>
+    <p class="subtitle">Hojiiwwan salphaa hojjechuun galii argadhu!</p>
     
     <div id="auth-box">
-      <h2>Sign Up / Log In</h2>
-      <input type="email" id="email" placeholder="Email kee galchi..." required>
-      <input type="password" id="password" placeholder="Password (jechoota 6+)..." required>
-      <button id="signup-btn">Sign Up</button>
-      <button id="login-btn">Log In</button>
+      <div class="input-group">
+        <input type="email" id="email" placeholder="Email kee galchi..." required>
+      </div>
+      <div class="input-group">
+        <input type="password" id="password" placeholder="Password (jechoota 6+)..." required>
+      </div>
+      <div class="btn-group">
+        <button id="signup-btn">Sign Up</button>
+        <button id="login-btn">Log In</button>
+      </div>
     </div>
 
     <div id="dashboard" style="display:none;">
-      <h2>Akkam nagayatti geesse!</h2>
-      <p>Balance: <span id="user-balance">0</span> ETB</p>
-      <button id="logout-btn">Log Out</button>
+      <h2>Baga Nagayaan Dhuftan!</h2>
+      <p style="margin: 15px 0;">Balance Kee: <strong id="user-balance" style="color: #38bdf8;">0</strong> ETB</p>
+      <button id="logout-btn" style="background: #ef4444; color: white;">Log Out</button>
     </div>
   </div>
 
+  <!-- SCRIPT JS KANA LINK GOCHUU MUST -->
   <script src="script.js"></script>
 </body>
 </html>
